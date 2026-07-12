@@ -1,0 +1,38 @@
+/* Atelier design-law tokens over Starlight */
+:root {
+	--sl-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
+	--sl-color-accent-low: #0d2b1d;
+	--sl-color-accent: #25be74;
+	--sl-color-accent-high: #a8e8c8;
+	--sl-color-white: #f5f5f3;
+	--sl-color-gray-1: #dededc;
+	--sl-color-gray-2: #9b9b98;
+	--sl-color-gray-3: #7a7a77;
+	--sl-color-gray-4: #5c5c5a;
+	--sl-color-gray-5: #2a2b2e;
+	--sl-color-gray-6: #141518;
+	--sl-color-black: #0a0a0b;
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #d1f2e2;
+	--sl-color-accent: #189659;
+	--sl-color-accent-high: #0b4a2c;
+	--sl-color-white: #1a1a18;
+	--sl-color-gray-1: #2a2a28;
+	--sl-color-gray-2: #4a4a48;
+	--sl-color-gray-3: #6a6a68;
+	--sl-color-gray-4: #9a9a98;
+	--sl-color-gray-5: #e2e2e0;
+	--sl-color-gray-6: #f2f2f0;
+	--sl-color-black: #fafaf8;
+}
+.sl-markdown-content h1, .sl-markdown-content h2, .site-title {
+	letter-spacing: -0.02em;
+}
+.sl-markdown-content code:not(pre code) {
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: 6px;
+}
+.sl-markdown-content table td, .sl-markdown-content table th {
+	border-color: var(--sl-color-gray-5);
+}
