@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 
 export default defineConfig({
 	site: process.env.ASTRO_SITE || 'https://inerate.github.io',
-	base: process.env.ASTRO_BASE || '/atelier/docs',
+	base: process.env.ASTRO_BASE || '/docs',
 	integrations: [
 		starlight({
 			title: 'Atelier Docs',

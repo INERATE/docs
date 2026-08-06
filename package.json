@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:forge": "node -e \"process.env.ASTRO_SITE='https://forge.inerate.com'; process.env.ASTRO_BASE='/atelier/docs'; require('child_process').spawnSync('npx', ['astro', 'build'], {stdio: 'inherit', shell: true})\"",
+    "build:gh": "node -e \"process.env.ASTRO_SITE='https://inerate.github.io'; process.env.ASTRO_BASE='/atelier/docs'; require('child_process').spawnSync('npx', ['astro', 'build'], {stdio: 'inherit', shell: true})\"",
     "sync": "node sync.mjs",
     "preview": "astro preview"
   },
