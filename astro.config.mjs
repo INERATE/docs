@@ -8,6 +8,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Atelier Docs',
+			favicon: '/assets/favicon.png',
 			description: 'The craftsman\'s framework for AI-built software.',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/INERATE/atelier' }],
 			customCss: ['./src/styles/custom.css'],
