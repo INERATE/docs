@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-	site: 'https://forge.inerate.com',
-	base: '/atelier/docs',
+	site: process.env.ASTRO_SITE || 'https://inerate.github.io',
+	base: process.env.ASTRO_BASE || '/atelier/docs',
 	integrations: [
 		starlight({
 			title: 'Atelier Docs',
