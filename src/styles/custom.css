@@ -36,3 +36,16 @@
 .sl-markdown-content table td, .sl-markdown-content table th {
 	border-color: var(--sl-color-gray-5);
 }
+
+starlight-theme-select select:focus,
+starlight-theme-select select:focus-visible,
+starlight-theme-select select:active,
+select:focus,
+select:focus-visible,
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible {
+	outline: none !important;
+	box-shadow: none !important;
+}
