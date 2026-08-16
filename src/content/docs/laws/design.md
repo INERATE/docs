@@ -15,6 +15,12 @@ isn't covered, pick the calmer, quieter option.
 - Type: grotesk display with −2% tracking, serif-italic for ONE phrase per major headline, tabular numerals for data
 - Every color/radius/shadow lives as a CSS variable in one place. A hardcoded hex in a component is a review failure.
 
+## macOS Tool & Cloudflare Telemetry Principles
+
+- **macOS Window Hierarchy**: Use precision traffic light controls (`#FF5F56`, `#FFBD2E`, `#27C93F`), native segmented toolbars, and Finder-style file item cards.
+- **Cloudflare-Grade Telemetry**: Live interactive terminal streams, real-time background worker status (`● 3 workers active`), execution latency counters (`0.034s`), and interactive CLI prompts.
+- **Translucency as Depth**: `backdrop-filter: blur(28px) saturate(190%)` with top-light specular insets (`inset 0 1px 0 var(--glass-hi)`).
+
 ## Motion
 
 Entrances on `cubic-bezier(0.16,1,0.3,1)`; springs for interaction (max one
@@ -26,7 +32,7 @@ only. Animate transform/opacity only.
 
 Rainbow and purple-pink gradient heroes · glossy 3D emoji icons · colored icon
 circles in 8 hues · heavy card shadows · bounce-in animations · fake dashboard
-screenshots · multiple accents · full-page spinners. **If it looks like a
+screenshots · multiple accents · full-page spinners · arbitrary connecting lines across empty space. **If it looks like a
 template, delete it.**
 
 ## How agents use it
