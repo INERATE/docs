@@ -7,28 +7,28 @@ export default defineConfig({
 	base: process.env.ASTRO_BASE || '/docs',
 	integrations: [
 		starlight({
-			title: 'Atelier Docs',
+			title: 'Inerate Docs',
 			favicon: '/assets/favicon.png',
-			description: 'The craftsman\'s framework for AI-built software.',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/INERATE/atelier' }],
+			description: 'Open source frameworks, microkernels, and tooling by Inerate.',
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/INERATE' }],
 			customCss: ['./src/styles/custom.css'],
 			sidebar: [
-				{ label: 'Start here', items: [
+				{ label: 'acri Microkernel', items: [
+					{ label: 'What is acri?', slug: 'acri' },
+					{ label: 'Installation & Quickstart', slug: 'acri/quickstart' },
+					{ label: 'Microkernel Architecture', slug: 'acri/architecture' },
+					{ label: 'Benchmark Receipts', slug: 'acri/benchmarks' },
+				]},
+				{ label: 'Atelier Framework', items: [
 					{ label: 'What is Atelier?', slug: 'index' },
 					{ label: 'Install & first project', slug: 'start/install' },
-				]},
-				{ label: 'The laws', items: [
 					{ label: 'Design law', slug: 'laws/design' },
 					{ label: 'Clean-code law', slug: 'laws/clean-code' },
 					{ label: 'Auth & structure laws', slug: 'laws/auth-structure' },
-				]},
-				{ label: 'Using Atelier', items: [
 					{ label: 'Commands', slug: 'use/commands' },
 					{ label: 'Self-learning', slug: 'use/learning' },
 					{ label: 'Media & living graphics', slug: 'use/media' },
 					{ label: 'Model routing & tokens', slug: 'use/routing' },
-				]},
-				{ label: 'Maintainers', items: [
 					{ label: 'Releasing & updates', slug: 'maintain/releasing' },
 				]},
 			],
