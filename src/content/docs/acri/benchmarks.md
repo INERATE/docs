@@ -14,6 +14,9 @@ Full write-up, with caveats and correction history: **[the research paper](https
 | **Recall@5 (100 tools)** | **100%** | `python -m assay.recall` | 52 gold queries |
 | **Model Accuracy (Gemini 2.5 Flash)** | **92%** | `python -m assay.accuracy` | vs 84% naive (100 tools) |
 | **Model Accuracy (Llama 3.1 70B, Cloudflare)** | **100%** | `python -m assay.accuracy --provider cloudflare` | vs 96% naive, one run |
+| **Model Accuracy (Llama 3.3 70B, Cloudflare)** | **100%** | `python -m assay.accuracy --provider cloudflare --model @cf/meta/llama-3.3-70b-instruct-fp8-fast` | vs 98% naive, one run |
+| **Model Accuracy (Claude Sonnet 4.6, Vertex)** | **96%** | `python -m assay.accuracy --provider vertex-claude --model claude-sonnet-4-6` | vs 92% naive, one run |
+| **Model Accuracy (Claude Sonnet 5, Vertex)** | **92%** | `python -m assay.accuracy --provider vertex-claude --model claude-sonnet-5` | vs 90% naive, one run |
 | **Context Reduction (100 tools)** | **95%** | `python -m assay.recall` | 5 tools sent instead of 100 |
 | **504-Tool Scale Test (Recall@5)** | **92%** | `python -m assay.scale` | 60+ domains |
 | **504-Tool Scale Test (Latency p50)** | **0.179 ms** (179 µs) | `python -m assay.scale` | 504 tools indexed |
@@ -32,8 +35,12 @@ python -m assay.latency
 # 2. Recall@k evaluation:
 python -m assay.recall
 
-# 3. Live model accuracy on Gemini 2.5 Flash:
-python -m assay.accuracy
+# 3. Live model accuracy -- five models across three vendors:
+python -m assay.accuracy --provider gemini
+python -m assay.accuracy --provider cloudflare --model @cf/meta/llama-3.1-70b-instruct
+python -m assay.accuracy --provider cloudflare --model @cf/meta/llama-3.3-70b-instruct-fp8-fast
+python -m assay.accuracy --provider vertex-claude --model claude-sonnet-4-6
+python -m assay.accuracy --provider vertex-claude --model claude-sonnet-5
 
 # 4. 504-tool enterprise scale stress test:
 python -m assay.scale
