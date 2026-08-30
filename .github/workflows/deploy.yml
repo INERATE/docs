@@ -14,6 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: withastro/action@v3
+        env:
+          # This repo's Pages now serves at the docs.inerate.com custom domain
+          # root, not inerate.github.io/docs/ -- astro.config.mjs's own
+          # default (site: inerate.github.io, base: /docs) only matched the
+          # old un-bound URL. Without this override every internal link and
+          # asset path bakes in the wrong prefix and 404s at the real domain.
+          ASTRO_SITE: https://docs.inerate.com
+          ASTRO_BASE: /
   deploy:
     needs: build
     runs-on: ubuntu-latest
