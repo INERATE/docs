@@ -5,6 +5,10 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	site: process.env.ASTRO_SITE || 'https://inerate.github.io',
 	base: process.env.ASTRO_BASE || '/docs',
+	prefetch: {
+		prefetchAll: true,
+		defaultStrategy: 'viewport',
+	},
 	integrations: [
 		starlight({
 			title: 'Inerate Docs',
