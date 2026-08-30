@@ -20,7 +20,7 @@ export default defineConfig({
 				{
 					tag: 'script',
 					attrs: {
-						src: '/spa-nav.js?v=2',
+						src: '/spa-nav.js?v=3',
 						type: 'module',
 					},
 				},

@@ -50,17 +50,32 @@ a:focus-visible {
 	box-shadow: none !important;
 }
 
+/* Top Loading Progress Bar */
+.spa-loading-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 3px;
+	width: 0%;
+	background: linear-gradient(90deg, var(--sl-color-accent), var(--sl-color-accent-high));
+	box-shadow: 0 0 10px var(--sl-color-accent);
+	z-index: 99999;
+	transition: width 150ms ease, opacity 200ms ease;
+	pointer-events: none;
+	opacity: 0;
+}
+
 /* Butter-smooth SPA View Transitions */
 @keyframes fadeIn {
-	from { opacity: 0; transform: translateY(3px); }
+	from { opacity: 0; transform: translateY(2px); }
 	to { opacity: 1; transform: translateY(0); }
 }
 
 ::view-transition-old(root) {
-	animation: 90ms ease-out both fadeOut;
+	animation: 60ms ease-out both fadeOut;
 }
 ::view-transition-new(root) {
-	animation: 120ms ease-in both fadeIn;
+	animation: 100ms ease-in both fadeIn;
 }
 @keyframes fadeOut {
 	to { opacity: 0; }

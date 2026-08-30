@@ -1,122 +1,160 @@
-// Ultra-Fast Zero-Refresh SPA Router with Instant Skeleton Shimmer Loading for Inerate Docs
+// Production-grade Instant SPA Router with Memory Pre-caching & Top Loading Bar for Inerate Docs
 (() => {
   if (typeof window === 'undefined') return;
 
-  const cache = new Map();
+  const htmlCache = new Map();
+  let loadingBar = null;
 
-  const SKELETON_HTML = `
-    <div class="doc-skeleton-container" aria-hidden="true">
-      <div class="doc-skeleton doc-skeleton-title"></div>
-      <div class="doc-skeleton doc-skeleton-badge"></div>
-      <div class="doc-skeleton-paragraphs">
-        <div class="doc-skeleton doc-skeleton-line" style="width: 95%;"></div>
-        <div class="doc-skeleton doc-skeleton-line" style="width: 88%;"></div>
-        <div class="doc-skeleton doc-skeleton-line" style="width: 72%;"></div>
-      </div>
-      <div class="doc-skeleton doc-skeleton-codeblock"></div>
-      <div class="doc-skeleton-paragraphs">
-        <div class="doc-skeleton doc-skeleton-line" style="width: 92%;"></div>
-        <div class="doc-skeleton doc-skeleton-line" style="width: 80%;"></div>
-        <div class="doc-skeleton doc-skeleton-line" style="width: 60%;"></div>
-      </div>
-    </div>
-  `;
-
-  // Preload & cache on hover / idle
-  async function preload(url) {
-    if (cache.has(url)) return cache.get(url);
-    try {
-      const res = await fetch(url);
-      if (res.ok) {
-        const text = await res.text();
-        cache.set(url, text);
-        return text;
-      }
-    } catch (_) {}
-    return null;
+  function getLoadingBar() {
+    if (!loadingBar) {
+      loadingBar = document.createElement('div');
+      loadingBar.className = 'spa-loading-bar';
+      document.body.appendChild(loadingBar);
+    }
+    return loadingBar;
   }
 
-  async function navigate(url, push = true) {
-    const currentMain = document.querySelector('main');
-    
-    // 1. Immediately update active sidebar link
+  function startLoading() {
+    const bar = getLoadingBar();
+    bar.style.opacity = '1';
+    bar.style.width = '30%';
+    setTimeout(() => {
+      if (bar.style.opacity === '1') bar.style.width = '75%';
+    }, 150);
+  }
+
+  function stopLoading() {
+    const bar = getLoadingBar();
+    bar.style.width = '100%';
+    setTimeout(() => {
+      bar.style.opacity = '0';
+      setTimeout(() => {
+        bar.style.width = '0%';
+      }, 200);
+    }, 100);
+  }
+
+  // Preload a URL into memory
+  async function preload(url) {
+    const cleanUrl = new URL(url, window.location.origin).pathname;
+    if (htmlCache.has(cleanUrl)) return;
+    try {
+      const res = await fetch(cleanUrl, { credentials: 'same-origin' });
+      if (res.ok) {
+        const text = await res.text();
+        htmlCache.set(cleanUrl, text);
+      }
+    } catch (_) {}
+  }
+
+  // Preload all sidebar links immediately on page load
+  function preloadAllLinks() {
+    document.querySelectorAll('nav a, a[href^="/"]').forEach(a => {
+      const href = a.getAttribute('href');
+      if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !a.target) {
+        preload(href);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    preloadAllLinks();
+  } else {
+    window.addEventListener('load', preloadAllLinks);
+  }
+
+  async function navigate(targetUrl, push = true) {
+    const parsed = new URL(targetUrl, window.location.origin);
+    const cleanPath = parsed.pathname;
+
+    // 1. Immediately highlight sidebar link for instant feedback
     document.querySelectorAll('nav a').forEach(a => {
       const href = a.getAttribute('href');
-      const isCurrent = href === url || href === new URL(url, window.location.origin).pathname;
-      if (isCurrent) {
+      if (!href) return;
+      const aPath = new URL(href, window.location.origin).pathname;
+      if (aPath === cleanPath || (cleanPath.endsWith('/') && aPath === cleanPath.slice(0, -1))) {
         a.setAttribute('aria-current', 'page');
       } else {
         a.removeAttribute('aria-current');
       }
     });
 
-    // 2. If not already in cache, instantly mount skeleton loading shimmer
-    let htmlPromise = cache.get(url);
-    let showedSkeleton = false;
+    startLoading();
 
-    if (!htmlPromise) {
-      if (currentMain) {
-        currentMain.innerHTML = SKELETON_HTML;
-        showedSkeleton = true;
+    let html = htmlCache.get(cleanPath);
+    if (!html) {
+      try {
+        const res = await fetch(cleanPath);
+        if (!res.ok) {
+          window.location.href = targetUrl;
+          return;
+        }
+        html = await res.text();
+        htmlCache.set(cleanPath, html);
+      } catch (e) {
+        window.location.href = targetUrl;
+        return;
       }
-      htmlPromise = fetch(url).then(res => {
-        if (!res.ok) throw new Error('Fetch failed');
-        return res.text();
-      });
-    } else if (typeof htmlPromise === 'string') {
-      htmlPromise = Promise.resolve(htmlPromise);
     }
 
     try {
-      const html = await htmlPromise;
-      cache.set(url, html);
-
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      const updateDOM = () => {
-        // Update Title
+      const applyChanges = () => {
+        // 1. Update Title
         document.title = doc.title;
 
-        // Update Main Content
+        // 2. Update Main Content
+        const currentMain = document.querySelector('main');
         const newMain = doc.querySelector('main');
-        const activeMain = document.querySelector('main');
-        if (activeMain && newMain) {
-          activeMain.replaceWith(newMain);
+        if (currentMain && newMain) {
+          currentMain.innerHTML = newMain.innerHTML;
         }
 
-        // Update Right TOC
+        // 3. Update Table of Contents
         const currentToc = document.querySelector('starlight-toc');
         const newToc = doc.querySelector('starlight-toc');
         if (currentToc && newToc) {
-          currentToc.replaceWith(newToc);
+          currentToc.innerHTML = newToc.innerHTML;
         }
 
-        // Scroll
-        const hash = new URL(url, window.location.origin).hash;
-        if (hash) {
-          const el = document.querySelector(hash);
-          if (el) el.scrollIntoView();
+        // 4. Update Prev / Next Pagination links
+        const currentPagination = document.querySelector('.pagination-links');
+        const newPagination = doc.querySelector('.pagination-links');
+        if (currentPagination && newPagination) {
+          currentPagination.innerHTML = newPagination.innerHTML;
+        }
+
+        // 5. Scroll
+        if (parsed.hash) {
+          const el = document.querySelector(parsed.hash);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         } else {
-          window.scrollTo(0, 0);
+          window.scrollTo({ top: 0, behavior: 'instant' });
         }
       };
 
       if (document.startViewTransition) {
-        document.startViewTransition(updateDOM);
+        document.startViewTransition(applyChanges);
       } else {
-        updateDOM();
+        applyChanges();
       }
 
       if (push) {
-        window.history.pushState({}, '', url);
+        window.history.pushState({}, '', targetUrl);
       }
+      stopLoading();
+
+      // Re-trigger preloading for any newly revealed links
+      setTimeout(preloadAllLinks, 50);
     } catch (err) {
-      window.location.href = url;
+      stopLoading();
+      window.location.href = targetUrl;
     }
   }
 
-  // Intercept Clicks
+  // Intercept all internal doc clicks
   document.addEventListener('click', e => {
     const link = e.target.closest('a');
     if (!link) return;
@@ -132,20 +170,17 @@
     navigate(url.href, true);
   });
 
-  // Preload on mouseover / touchstart for instant sub-millisecond response
+  // Preload on mouseover for zero-latency clicks
   document.addEventListener('mouseover', e => {
     const link = e.target.closest('a');
     if (!link) return;
     const href = link.getAttribute('href');
     if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !link.target) {
-      const url = new URL(href, window.location.origin);
-      if (url.origin === window.location.origin) {
-        preload(url.href);
-      }
+      preload(href);
     }
   });
 
-  // Browser Navigation History
+  // Popstate for browser back/forward
   window.addEventListener('popstate', () => {
     navigate(window.location.href, false);
   });
