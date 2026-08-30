@@ -1,48 +1,98 @@
-// Zero-dependency Client-Side SPA Navigation & Smooth View Transitions for Inerate Docs
+// Ultra-Fast Zero-Refresh SPA Router with Instant Skeleton Shimmer Loading for Inerate Docs
 (() => {
   if (typeof window === 'undefined') return;
 
-  async function navigate(url, push = true) {
+  const cache = new Map();
+
+  const SKELETON_HTML = `
+    <div class="doc-skeleton-container" aria-hidden="true">
+      <div class="doc-skeleton doc-skeleton-title"></div>
+      <div class="doc-skeleton doc-skeleton-badge"></div>
+      <div class="doc-skeleton-paragraphs">
+        <div class="doc-skeleton doc-skeleton-line" style="width: 95%;"></div>
+        <div class="doc-skeleton doc-skeleton-line" style="width: 88%;"></div>
+        <div class="doc-skeleton doc-skeleton-line" style="width: 72%;"></div>
+      </div>
+      <div class="doc-skeleton doc-skeleton-codeblock"></div>
+      <div class="doc-skeleton-paragraphs">
+        <div class="doc-skeleton doc-skeleton-line" style="width: 92%;"></div>
+        <div class="doc-skeleton doc-skeleton-line" style="width: 80%;"></div>
+        <div class="doc-skeleton doc-skeleton-line" style="width: 60%;"></div>
+      </div>
+    </div>
+  `;
+
+  // Preload & cache on hover / idle
+  async function preload(url) {
+    if (cache.has(url)) return cache.get(url);
     try {
       const res = await fetch(url);
-      if (!res.ok) {
-        window.location.href = url;
-        return;
+      if (res.ok) {
+        const text = await res.text();
+        cache.set(url, text);
+        return text;
       }
-      const html = await res.text();
+    } catch (_) {}
+    return null;
+  }
+
+  async function navigate(url, push = true) {
+    const currentMain = document.querySelector('main');
+    
+    // 1. Immediately update active sidebar link
+    document.querySelectorAll('nav a').forEach(a => {
+      const href = a.getAttribute('href');
+      const isCurrent = href === url || href === new URL(url, window.location.origin).pathname;
+      if (isCurrent) {
+        a.setAttribute('aria-current', 'page');
+      } else {
+        a.removeAttribute('aria-current');
+      }
+    });
+
+    // 2. If not already in cache, instantly mount skeleton loading shimmer
+    let htmlPromise = cache.get(url);
+    let showedSkeleton = false;
+
+    if (!htmlPromise) {
+      if (currentMain) {
+        currentMain.innerHTML = SKELETON_HTML;
+        showedSkeleton = true;
+      }
+      htmlPromise = fetch(url).then(res => {
+        if (!res.ok) throw new Error('Fetch failed');
+        return res.text();
+      });
+    } else if (typeof htmlPromise === 'string') {
+      htmlPromise = Promise.resolve(htmlPromise);
+    }
+
+    try {
+      const html = await htmlPromise;
+      cache.set(url, html);
+
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
       const updateDOM = () => {
-        // 1. Update document title
+        // Update Title
         document.title = doc.title;
 
-        // 2. Update main content
-        const currentMain = document.querySelector('main');
+        // Update Main Content
         const newMain = doc.querySelector('main');
-        if (currentMain && newMain) {
-          currentMain.replaceWith(newMain);
+        const activeMain = document.querySelector('main');
+        if (activeMain && newMain) {
+          activeMain.replaceWith(newMain);
         }
 
-        // 3. Update right-side table of contents (if present)
+        // Update Right TOC
         const currentToc = document.querySelector('starlight-toc');
         const newToc = doc.querySelector('starlight-toc');
         if (currentToc && newToc) {
           currentToc.replaceWith(newToc);
         }
 
-        // 4. Update sidebar active links
-        document.querySelectorAll('nav a').forEach(a => {
-          const href = a.getAttribute('href');
-          const isCurrent = href === url || href === new URL(url, window.location.origin).pathname;
-          if (isCurrent) {
-            a.setAttribute('aria-current', 'page');
-          } else {
-            a.removeAttribute('aria-current');
-          }
-        });
-
-        // 5. Scroll to top or target hash
+        // Scroll
         const hash = new URL(url, window.location.origin).hash;
         if (hash) {
           const el = document.querySelector(hash);
@@ -66,7 +116,7 @@
     }
   }
 
-  // Intercept internal link clicks
+  // Intercept Clicks
   document.addEventListener('click', e => {
     const link = e.target.closest('a');
     if (!link) return;
@@ -82,7 +132,20 @@
     navigate(url.href, true);
   });
 
-  // Handle browser back/forward buttons
+  // Preload on mouseover / touchstart for instant sub-millisecond response
+  document.addEventListener('mouseover', e => {
+    const link = e.target.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !link.target) {
+      const url = new URL(href, window.location.origin);
+      if (url.origin === window.location.origin) {
+        preload(url.href);
+      }
+    }
+  });
+
+  // Browser Navigation History
   window.addEventListener('popstate', () => {
     navigate(window.location.href, false);
   });

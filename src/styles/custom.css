@@ -65,3 +65,61 @@ a:focus-visible {
 @keyframes fadeOut {
 	to { opacity: 0; }
 }
+
+/* Shimmering Skeleton Loading State */
+.doc-skeleton-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	padding-top: 1rem;
+	animation: fadeIn 150ms ease-in;
+}
+
+.doc-skeleton {
+	background: linear-gradient(
+		90deg,
+		var(--sl-color-gray-6) 0%,
+		var(--sl-color-gray-5) 50%,
+		var(--sl-color-gray-6) 100%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite ease-in-out;
+	border-radius: 8px;
+}
+
+@keyframes shimmer {
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+.doc-skeleton-title {
+	height: 42px;
+	width: 55%;
+	border-radius: 10px;
+}
+
+.doc-skeleton-badge {
+	height: 24px;
+	width: 25%;
+	border-radius: 6px;
+	margin-top: -0.5rem;
+}
+
+.doc-skeleton-paragraphs {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin: 0.5rem 0;
+}
+
+.doc-skeleton-line {
+	height: 16px;
+	border-radius: 4px;
+}
+
+.doc-skeleton-codeblock {
+	height: 140px;
+	width: 100%;
+	border-radius: 10px;
+	border: 1px solid var(--sl-color-gray-5);
+}
