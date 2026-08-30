@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-	site: process.env.ASTRO_SITE || 'https://inerate.github.io',
-	base: process.env.ASTRO_BASE || '/docs',
+	site: process.env.ASTRO_SITE || 'https://docs.inerate.com',
+	base: process.env.ASTRO_BASE || '/',
 	prefetch: {
 		prefetchAll: true,
 		defaultStrategy: 'viewport',
