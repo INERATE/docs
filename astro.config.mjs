@@ -14,13 +14,13 @@ export default defineConfig({
 			customCss: ['./src/styles/custom.css'],
 			sidebar: [
 				{ label: 'acri Microkernel', items: [
-					{ label: 'What is acri?', slug: 'acri' },
+					{ label: 'What is acri?', slug: 'index' },
 					{ label: 'Installation & Quickstart', slug: 'acri/quickstart' },
 					{ label: 'Microkernel Architecture', slug: 'acri/architecture' },
 					{ label: 'Benchmark Receipts', slug: 'acri/benchmarks' },
 				]},
 				{ label: 'Atelier Framework', items: [
-					{ label: 'What is Atelier?', slug: 'index' },
+					{ label: 'What is Atelier?', slug: 'atelier' },
 					{ label: 'Install & first project', slug: 'start/install' },
 					{ label: 'Design law', slug: 'laws/design' },
 					{ label: 'Clean-code law', slug: 'laws/clean-code' },

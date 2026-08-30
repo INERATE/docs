@@ -1,35 +1,49 @@
 ---
-title: What is Atelier?
-description: The craftsman's framework for AI-built software — done-state contracts, design law, auto model routing, self-learning taste.
+title: What is acri?
+description: The client-side capability resolver microkernel for AI agents.
 ---
 
-> **Atelier** (n.) — the workshop of a master craftsman.
-
-Modern LLMs don't fail because they can't code. They fail because they don't know
-what **done** means, what **good** looks like, and when to **stop**. Atelier is the
-senior engineer they're missing, packaged as one installable Claude Code plugin.
+**acri** (`pyacri`) is a client-side capability resolution microkernel for AI agents. It eliminates prompt bloat by indexing 500+ MCP tools and selecting the exact top candidates in **40 microseconds** (0.040 ms).
 
 ```
-/plugin marketplace add INERATE/atelier
-/plugin install atelier
+┌─────────────────────────────────────────────────────────────┐
+│                 THE ACRI AGENT MICROKERNEL                  │
+│                                                             │
+│  1. Capability Addressing         ──▶ compass.resolve()     │
+│  2. In-Memory Registry            ──▶ corpus.index()        │
+│  3. Model Abstraction Layer (HAL) ──▶ port.gemini / .openai │
+│  4. Memory Management Unit (MMU)  ──▶ press.compact()       │
+│  5. Process & Container Sandbox   ──▶ sandbox.sandboxed()   │
+│  6. Real-Time Trace Visualizer    ──▶ acri studio (:8099)   │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## What one install gives you
+## Why acri?
 
-| Layer | What it does |
-|-------|--------------|
-| **Laws** (5) | Design law, clean-code (250 words/file), auth, structure, ponytail minimalism |
-| **Commands** (11) | `/atelier:bootstrap` → `/plan` → `/build` → `/review` → `/ship`, plus learn, promote, doctor, update, status, clarify |
-| **Agents** (5) | Architect (Opus) plans · Builder (Sonnet) executes · Design-scout studies premium source · Learner ingests your taste · Summarizer (Haiku) digests |
-| **Knowledge graph** | A SQLite store; `store.py map <topic>` routes any agent to the right law — no guessing, no token waste |
-| **Media forge** | Gemini Omni Flash / Veo 3.1 video, logo & icon generation, webp milling, transparent cuts, scrollytelling |
-| **Connectors** | shadcn/ui, Aceternity, ReactBits, MagicUI, Stitch, Chrome — plus `mcp-maker` to add your own |
+When building tool-calling AI agents, developers often dump 50 to 500 tool schemas directly into the LLM system prompt. This causes **three critical problems**:
 
-## The core idea: done is a contract
+1. **Context Window Bloat & Cost:** 100 tools consume ~15,000 tokens on *every single turn*.
+2. **Model Confusion & Hallucinations:** Live benchmark accuracy drops significantly because the model struggles to choose among hundreds of competing JSON schemas.
+3. **Prefix-Cache Invalidation:** In-turn tool swapping breaks provider KV prompt caching.
 
-Before any code, Atelier writes measurable done-criteria into the project store.
-The agent **cannot claim "finished"** while one criterion is unmet — the loop engine
-refuses to terminate. Review gates (design tokens, file budgets, ponytail, graph
-impact) verify each one with evidence.
+acri solves this at the microkernel layer:
 
-Next: [Install & first project](/docs/start/install/).
+* **Instant Indexing:** BM25 lexical inverted index over tool names, descriptions, and parameters.
+* **40µs Resolution:** Selects top-$k$ relevant tools before the LLM wire call.
+* **Universal Provider Support:** Native zero-dependency ports for Google Gemini, Anthropic Claude (Vertex/Direct), OpenAI (Azure/Direct), xAI Grok (Azure/Direct), Meta Llama (Cloudflare), and local vLLM/Ollama.
+
+## Quick Installation
+
+```bash
+pip install pyacri
+```
+
+```python
+import acri
+
+# Register your tools
+corpus = acri.index(tools)
+
+# Resolve top-5 relevant tools in 40 microseconds
+resolved = acri.resolve("is PR 42 ready to merge?", corpus, k=5)
+```
