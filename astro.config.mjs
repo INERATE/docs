@@ -16,6 +16,15 @@ export default defineConfig({
 			description: 'Open source frameworks, microkernels, and tooling by Inerate.',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/INERATE' }],
 			customCss: ['./src/styles/custom.css'],
+			head: [
+				{
+					tag: 'script',
+					attrs: {
+						src: '/spa-nav.js',
+						type: 'module',
+					},
+				},
+			],
 			sidebar: [
 				{ label: 'acri Microkernel', items: [
 					{ label: 'What is acri?', slug: 'index' },
