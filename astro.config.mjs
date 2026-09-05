@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
 	site: process.env.ASTRO_SITE || 'https://docs.inerate.com',
@@ -10,6 +11,7 @@ export default defineConfig({
 		defaultStrategy: 'viewport',
 	},
 	integrations: [
+		sitemap(),
 		starlight({
 			title: 'Inerate Docs',
 			favicon: '/assets/favicon.png',
