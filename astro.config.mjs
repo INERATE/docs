@@ -14,8 +14,8 @@ export default defineConfig({
 		sitemap(),
 		starlight({
 			title: 'Inerate Docs',
-			favicon: '/assets/favicon.png',
-			description: 'Open source frameworks, microkernels, and tooling by Inerate.',
+			favicon: '/assets/favicon.svg',
+			description: "Documentation for Inerate's open-source frameworks and microkernels — acri (agent capability resolver) and Atelier (the AI craftsman framework).",
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/INERATE' }],
 			customCss: ['./src/styles/custom.css'],
 			head: [
