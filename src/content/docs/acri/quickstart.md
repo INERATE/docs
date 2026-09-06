@@ -16,7 +16,7 @@ pip install pyacri
 ### TypeScript / Node.js & Browser
 
 ```bash
-npm install acri-core
+npm install @inerate/acri-core
 ```
 
 ### Rust
