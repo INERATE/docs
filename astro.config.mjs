@@ -8,7 +8,7 @@ export default defineConfig({
 	base: process.env.ASTRO_BASE || '/',
 	prefetch: {
 		prefetchAll: true,
-		defaultStrategy: 'viewport',
+		defaultStrategy: 'hover',
 	},
 	integrations: [
 		sitemap(),
@@ -18,18 +18,9 @@ export default defineConfig({
 			description: "Documentation for Inerate's open-source frameworks and microkernels — acri (agent capability resolver) and Atelier (the AI craftsman framework).",
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/INERATE' }],
 			customCss: ['./src/styles/custom.css'],
-			head: [
-				{
-					tag: 'script',
-					attrs: {
-						src: '/spa-nav.js?v=3',
-						type: 'module',
-					},
-				},
-			],
 			sidebar: [
 				{ label: 'acri Microkernel', items: [
-					{ label: 'What is acri?', slug: 'index' },
+					{ label: 'What is acri?', slug: 'acri' },
 					{ label: 'Installation & Quickstart', slug: 'acri/quickstart' },
 					{ label: 'Microkernel Architecture', slug: 'acri/architecture' },
 					{ label: 'Benchmark Receipts', slug: 'acri/benchmarks' },

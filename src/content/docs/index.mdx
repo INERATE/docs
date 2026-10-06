@@ -1,49 +1,35 @@
 ---
-title: What is acri?
-description: The client-side capability resolver microkernel for AI agents.
+title: Inerate Documentation
+description: Guides for acri and Atelier, including installation, architecture, benchmarks, engineering standards, and agent workflows.
 ---
 
-**acri** (`pyacri`) is a client-side capability resolution microkernel for AI agents. It eliminates prompt bloat by indexing 500+ MCP tools and selecting the exact top candidates in **40 microseconds** (0.040 ms).
+export const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                 THE ACRI AGENT MICROKERNEL                  │
-│                                                             │
-│  1. Capability Addressing         ──▶ compass.resolve()     │
-│  2. In-Memory Registry            ──▶ corpus.index()        │
-│  3. Model Abstraction Layer (HAL) ──▶ port.gemini / .openai │
-│  4. Memory Management Unit (MMU)  ──▶ press.compact()       │
-│  5. Process & Container Sandbox   ──▶ sandbox.sandboxed()   │
-│  6. Real-Time Trace Visualizer    ──▶ acri studio (:8099)   │
-└─────────────────────────────────────────────────────────────┘
-```
+Inerate builds open-source software for AI agents and software engineering. Use these guides to install the projects, understand their architecture, and reproduce their results.
 
-## Why acri?
+## acri: capability resolution for AI agents
 
-When building tool-calling AI agents, developers often dump 50 to 500 tool schemas directly into the LLM system prompt. This causes **three critical problems**:
+acri indexes tool capabilities so an agent can select relevant tools without sending every definition on each request. Start with the overview, then follow the installation guide and evaluation receipts.
 
-1. **Context Window Bloat & Cost:** 100 tools consume ~15,000 tokens on *every single turn*.
-2. **Model Confusion & Hallucinations:** Live benchmark accuracy drops significantly because the model struggles to choose among hundreds of competing JSON schemas.
-3. **Prefix-Cache Invalidation:** In-turn tool swapping breaks provider KV prompt caching.
+- <a href={`${base}/acri/`}>What is acri?</a>
+- <a href={`${base}/acri/quickstart/`}>Installation and quickstart</a>
+- <a href={`${base}/acri/architecture/`}>Microkernel architecture</a>
+- <a href={`${base}/acri/benchmarks/`}>Benchmarks and reproduction</a>
+- [Research paper](https://research.inerate.com/acri)
+- [Project and developer guide](https://forge.inerate.com/acri)
 
-acri solves this at the microkernel layer:
+## Atelier: engineering workflows for AI-built software
 
-* **Instant Indexing:** BM25 lexical inverted index over tool names, descriptions, and parameters.
-* **40µs Resolution:** Selects top-$k$ relevant tools before the LLM wire call.
-* **Universal Provider Support:** Native zero-dependency ports for Google Gemini, Anthropic Claude (Vertex/Direct), OpenAI (Azure/Direct), xAI Grok (Azure/Direct), Meta Llama (Cloudflare), and local vLLM/Ollama.
+Atelier organizes agent work around a defined outcome, implementation standards, and review gates. Its guides explain installation, commands, reusable skills, and release checks.
 
-## Quick Installation
+- <a href={`${base}/atelier/`}>What is Atelier?</a>
+- <a href={`${base}/start/install/`}>Install and start a project</a>
+- <a href={`${base}/use/commands/`}>Commands</a>
+- <a href={`${base}/laws/design/`}>Design standards</a>
+- <a href={`${base}/laws/clean-code/`}>Code standards</a>
+- <a href={`${base}/laws/auth-structure/`}>Authentication and project structure</a>
+- <a href={`${base}/maintain/releasing/`}>Releasing and updates</a>
 
-```bash
-pip install pyacri
-```
+## More from Inerate
 
-```python
-import acri
-
-# Register your tools
-corpus = acri.index(tools)
-
-# Resolve top-5 relevant tools in 40 microseconds
-resolved = acri.resolve("is PR 42 ready to merge?", corpus, k=5)
-```
+[Inerate](https://inerate.com/) · [Forge](https://forge.inerate.com/) · [Research](https://research.inerate.com/) · [Browser tools](https://tools.inerate.com/) · [Piyush Sharma](https://piyush.inerate.com/)
