@@ -28,13 +28,13 @@ codex plugin add atelier@atelier-codex
 
 ```bash
 git clone https://github.com/INERATE/atelier ~/.atelier
-cd your-project && python ~/.atelier/scripts/install.py --project .
+cd your-project && python3 ~/.atelier/scripts/install.py --project .
 ```
 
 This links the skills into the shared agent skills folders and writes an
 Atelier block into `AGENTS.md` and `GEMINI.md`. Then ask in plain words:
 "use atelier to plan …", "atelier build". Update with
-`git -C ~/.atelier pull` and run the installer again.
+`git -C ~/.atelier pull` and run the installer again (on Windows, type `python` instead of `python3`).
 [Full guide](https://github.com/INERATE/atelier/blob/main/docs/INSTALL.md).
 
 ## First project
