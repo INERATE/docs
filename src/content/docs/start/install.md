@@ -17,6 +17,26 @@ Restart Claude Code once — plugins load at session start. Verify with
 auto-update on once: `/plugin` → Marketplaces → `atelier-marketplace` →
 **Enable auto-update**. Third-party marketplaces are off by default.
 
+### Codex
+
+```
+codex plugin marketplace add INERATE/atelier
+codex plugin add atelier@atelier-codex
+```
+
+### Any other agent (OpenCode, Cursor, Gemini CLI, Copilot, Windsurf, Cline, Aider…)
+
+```bash
+git clone https://github.com/INERATE/atelier ~/.atelier
+cd your-project && python ~/.atelier/scripts/install.py --project .
+```
+
+This links the skills into the shared agent skills folders and writes an
+Atelier block into `AGENTS.md` and `GEMINI.md`. Then ask in plain words:
+"use atelier to plan …", "atelier build". Update with
+`git -C ~/.atelier pull` and run the installer again.
+[Full guide](https://github.com/INERATE/atelier/blob/main/docs/INSTALL.md).
+
 ## First project
 
 ```
