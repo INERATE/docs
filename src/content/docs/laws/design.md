@@ -50,13 +50,31 @@ Each project draws its own SVG family: one grid, one stroke, one signature
 trait, and product-specific metaphors. Icons animate on state (plus → close,
 check draws), on parent hover (arrow nudge, lid lifts), or ambiently for live
 status only. Default `lucide-react`, `react-icons` and Heroicons are not
-shipped as the visible family.
+shipped as the visible family, and neither are the icons AI reaches for:
+robot heads for chatbots, sparkles or wands for "AI", brains, rockets,
+lightbulbs. An assistant gets a name and the brand mark. A 12-icon starter
+family lives in `templates/icons/`.
+
+## Imagery makes it alive
+
+A page of cards and icons alone reads as a template. Every entry view has a
+primary visual and every major section a visual anchor: 3D-feeling object
+renders with light, material and depth (pointer tilt or parallax — the Apple
+effect), real photography, product UI, register-styled illustration, data
+visualization, animated icons or short muted loops. One light direction and
+one material language across all of it.
 
 ## Tokens, not vibes
 
 Every color, radius, shadow, blur, duration and easing is a CSS variable in one
 file. Themes swap variable sets on `:root[data-theme]`, and dark mode is
 designed, not inverted. A hardcoded hex in a component is a review failure.
+
+## Start from templates
+
+`templates/registers/` has token files for all eight registers (light and
+dark, every text pair ≥ 4.5:1). Copy `_shared.css` plus one register, then
+tune it to the evidence.
 
 ## The AI-tell scan (banned outright)
 
@@ -66,6 +84,9 @@ blobs · icons in tinted squares in three-column feature grids · sparkles for
 fake metrics, logos and testimonials · "unlock / elevate / seamless" copy ·
 "Get started" + "Learn more" · the same layout for every product. **If it looks
 like a template, or like the last project, redo it.**
+
+Run `python scripts/tell_scan.py <project>` to check code automatically: it
+reports each hit as `file:line rule -> fix` and exits 1, so it can gate CI.
 
 Full text: [`design-law`](https://github.com/INERATE/atelier/blob/main/skills/design-law/SKILL.md) ·
 [`fluid-interface`](https://github.com/INERATE/atelier/blob/main/skills/fluid-interface/SKILL.md) ·
